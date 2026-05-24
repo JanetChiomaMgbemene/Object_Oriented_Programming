@@ -1,67 +1,40 @@
-# 🗓 Timetable-Based Habit Tracking Application
-
-**Course:** DLBDSOOFPP01 – Object Oriented and Functional Programming with Python  
-**Author:** Janet Chioma Mgbemene · Matriculation No. 92130452  
-**Programme:** Cybersecurity  
-
----
-
-## Table of Contents
-
-1. [Project Overview](#1-project-overview)
-2. [Features](#2-features)
-3. [Requirements](#3-requirements)
-4. [Installation](#4-installation)
-5. [How to Run](#5-how-to-run)
-6. [First Launch](#6-first-launch)
-7. [Using the CLI](#7-using-the-cli)
-8. [Using the GUI](#8-using-the-gui)
-9. [Project Structure](#9-project-structure)
-10. [Module Descriptions](#10-module-descriptions)
-11. [How Time Recording Works](#11-how-time-recording-works)
-12. [Data Storage](#12-data-storage)
-13. [Running the Tests](#13-running-the-tests)
-14. [Design Principles](#14-design-principles)
-15. [Known Limitations & Future Work](#15-known-limitations--future-work)
-
----
-
+#  Timetable-Based Habit Tracking Application
 ## 1. Project Overview
-
+Habit Tracker is a simple application built using Python and object-oriented programming (OOP) concepts.
 This is a Python-based habit tracking application that organises habits into a
-**timetable** format rather than a plain checklist. Instead of showing habits as
-a flat list, the app groups them by **time window** (e.g. Morning, Evening) so
+timetable format rather than a plain checklist. Instead of showing habits as
+a flat list, the app groups them by time window (e.g. Morning, Evening) so
 users can see their daily schedule at a glance.
 
-When a user starts or finishes a habit, the app **automatically records the
-exact local clock time** in their timezone — no manual time entry required.
-This means the timetable shows not just *when* a habit was planned, but *when
-it actually happened*.
+When a user starts or finishes a habit, the app automatically records the
+exact local clock time in their timezone (no manual time entry required).
+This means the timetable shows not just when a habit was planned, but when
+it actually happened.
 
 The application is available in two modes:
 
 | Mode | File to run | Best for |
 |---|---|---|
-| **CLI** (Command-Line Interface) | `main.py` | Terminal users, coursework submission |
-| **GUI** (Graphical User Interface) | `gui/gui_manager.py` | Visual interaction, daily use |
+| CLI (Command-Line Interface) | `main.py` | Terminal users, coursework submission |
+| GUI (Graphical User Interface) | `gui/gui_manager.py` | Visual interaction, daily use |
 
 ---
 
 ## 2. Features
 
-- **Time window picker** — choose Morning, Evening, etc. instead of typing a time
-- **Auto-recorded times** — the app logs the exact clock time you press Start and Done
-- **Duration tracking** — automatically calculates how long each habit took
-- **Timezone support** — works correctly for users in any timezone worldwide
-- **Streak tracking** — counts consecutive completions and alerts you when a streak is at risk
-- **Proof upload** — attach a photo as evidence of completing a habit
-- **Motivational messages** — personalised congratulatory messages on completion
-- **Rewards system** — assign a reward to each habit
-- **Analytics** — completion rates, streaks, weakest habits, average duration
-- **Predefined habits** — browse built-in suggestions to get started quickly
-- **4-week sample data** — load realistic dummy data for testing and demonstration
-- **JSON persistence** — all data is saved to disk and reloaded between sessions
-- **No internet required** — fully offline, no third-party packages needed
+- Time window picker - choose Morning, Evening, etc. instead of typing a time
+- Auto-recorded times - the app logs the exact clock time you press Start and Done
+- Duration tracking - automatically calculates how long each habit took
+- Timezone support - works correctly for users in any timezone worldwide
+- Streak tracking - counts consecutive completions and alerts you when a streak is at risk
+- Proof upload - attach a photo as evidence of completing a habit
+- Motivational messages - personalised congratulatory messages on completion
+- Rewards system - assign a reward to each habit
+- Analytics - completion rates, streaks, weakest habits, average duration
+- Predefined habits - browse built-in suggestions to get started quickly
+- 4-week sample data - load realistic dummy data for testing and demonstration
+- JSON persistence - all data is saved to disk and reloaded between sessions
+- No internet required - fully offline, no third-party packages needed
 
 ---
 
@@ -69,12 +42,12 @@ The application is available in two modes:
 
 | Requirement | Details |
 |---|---|
-| Python version | **3.9 or higher** (3.12 recommended) |
-| External packages | **None** — uses only the Python standard library |
+| Python version | *3.9 or higher* (3.12 recommended) |
+| External packages | None — uses only the Python standard library |
 | Operating system | Windows, macOS, or Linux |
 | GUI dependency | Tkinter (included with most Python installations) |
 
-> **Why Python 3.9+?**  
+> Why Python 3.9+?  
 > This project uses `zoneinfo`, a timezone library that was added to the Python
 > standard library in version 3.9. No `pip install` is needed.
 
@@ -95,10 +68,7 @@ python3 -m tkinter
 A small test window should appear. If it does, Tkinter is installed. If not,
 see the note below.
 
-> **Tkinter not found?**  
-> On Ubuntu/Debian: `sudo apt install python3-tk`  
-> On Fedora: `sudo dnf install python3-tkinter`  
-> On macOS with Homebrew: `brew install python-tk`  
+> Tkinter not found?    
 > On Windows: reinstall Python from python.org and tick the "tcl/tk" option.
 
 ---
@@ -140,10 +110,10 @@ in the CLI is immediately visible in the GUI and vice versa.
 
 ## 6. First Launch
 
-The very first time you run the app, it will ask you to **choose your timezone**.
+The very first time you run the app, it will ask you to "choose your timezone".
 This is a one-time setup step.
 
-**CLI — timezone picker:**
+CLI — timezone picker:
 
 ```
 ══════════════════════════════════════════════════
@@ -162,11 +132,11 @@ Choose timezone: 1
 ✓ Timezone set to: Africa/Lagos
 ```
 
-**GUI — timezone picker:**  
+GUI — timezone picker:  
 A screen with radio buttons appears. Select your region and click
-**Confirm & Continue**.
+Confirm & Continue.
 
-After choosing your timezone, the app will offer to load **sample data** — 5
+After choosing your timezone, the app will offer to load sample data - 5
 pre-built habits with 4 weeks of realistic history. This is useful for
 exploring the app before creating your own habits.
 
@@ -200,7 +170,7 @@ After the first-launch setup, the main menu is displayed on every run:
 ### Adding a habit
 
 Select `[4]` and follow the prompts. When asked for a time, you will see a
-**numbered window menu** instead of a text box:
+"numbered window menu" instead of a text box:
 
 ```
   When do you want to do this habit?
@@ -293,22 +263,21 @@ python3 gui/gui_manager.py
 
 | Screen | How to reach it | What it does |
 |---|---|---|
-| **Timezone Setup** | Automatic on first run | Choose your local timezone |
-| **Main Dashboard** | Home screen | Progress bar, streak alerts, quick habit list |
-| **Timetable** | "View Timetable" button | Grid of all habits; Start / Done buttons |
-| **Add Habit** | "Add New Habit" button | Form with window dropdown (no typed times) |
-| **Habit Detail** | "Details" on any habit | Full stats, history table, proof upload |
-| **Analytics** | "Analytics" button | Summary report and per-habit breakdown |
-| **Manage Habits** | "Manage Habits" button | Edit name/window/reward, or delete |
+| Timezone Setup | Automatic on first run | Choose your local timezone |
+| Main Dashboard | Home screen | Progress bar, streak alerts, quick habit list |
+| Timetable | "View Timetable" button | Grid of all habits; Start / Done buttons |
+| Add Habit | "Add New Habit" button | Form with window dropdown (no typed times) |
+| Habit Detail | "Details" on any habit | Full stats, history table, proof upload |
+| Analytics | "Analytics" button | Summary report and per-habit breakdown |
+| Manage Habits | "Manage Habits" button | Edit name/window/reward, or delete |
 
 ### Key GUI interactions
 
-- **Start button (▶)** — click when you begin a habit; records the real clock time
-- **Done button (✓)** — click when you finish; records end time and calculates duration
-- **Upload Proof** — opens a file picker to attach a photo (jpg, png, etc.)
-- **Details** — opens a full history table showing actual start/end times per entry
+- Start button (▶) - click when you begin a habit; records the real clock time
+- Done button (✓) - click when you finish; records end time and calculates duration
+- Upload Proof - opens a file picker to attach a photo (jpg, png, etc.)
+- Details - opens a full history table showing actual start/end times per entry
 - The clock in the top-right corner updates every second in your local timezone
-
 ---
 
 ## 9. Project Structure
@@ -362,10 +331,6 @@ habit_tracker/
 ├── requirements.txt              # No installs needed (standard library only)
 └── README.md                     # This file
 ```
-
-> **Note:** The `data/` and `uploads/` folders are created automatically the
-> first time you run the app. You do not need to create them manually.
-
 ---
 
 ## 10. Module Descriptions
@@ -376,7 +341,7 @@ The core data structure. Every habit is an instance of the `Habit` class.
 Key attributes:
 - `preferred_window` — the time slot the user chose (e.g. `"Morning"`)
 - `scheduled_start` / `scheduled_end` — the window boundaries (e.g. `"06:00"`, `"09:00"`)
-- `actual_start_time` / `actual_end_time` — the **real clock times** recorded automatically
+- `actual_start_time` / `actual_end_time` — the real clock times recorded automatically
 - `completion_history` — a list of log entries, one per completion
 
 Key methods:
@@ -450,7 +415,7 @@ Key methods:
 ---
 
 ### `analytics/analytics.py`
-All analytics functions are **pure functions** following Functional Programming
+All analytics functions are pure functions following Functional Programming
 principles: given the same input they always return the same output, and they
 never modify any Habit objects.
 
@@ -495,15 +460,15 @@ The user typed a fixed start time (e.g. `"06:00"`) and a fixed end time
 of when the user actually did the habit.
 
 ### New approach
-The user chooses a **time window** (e.g. "Morning: 06:00–09:00") when
-*creating* a habit. This window represents their *intention* — when they
+The user chooses a 'time window' (e.g. "Morning: 06:00–09:00") when
+creating a habit. This window represents their intention — when they
 plan to do it.
 
-When they actually *do* the habit:
+When they actually do the habit:
 
-1. They press **Start** → the app calls `habit.start_habit()` which records
+1. They press "Start" → the app calls `habit.start_habit()` which records
    `datetime.now(ZoneInfo(user_timezone))` as `actual_start_time`
-2. They press **Done** → the app calls `habit.mark_complete()` which records
+2. They press "Done" → the app calls `habit.mark_complete()` which records
    the end time and calculates `duration_mins = end - start`
 
 Both times are stored in the `completion_history` log entry:
@@ -522,8 +487,8 @@ Both times are stored in the `completion_history` log entry:
 ```
 
 This means:
-- The timetable always shows **real** times, not planned ones
-- The analytics can report **average actual duration**
+- The timetable always shows real times, not planned ones
+- The analytics can report average actual duration
 - The user never has to type a time manually
 
 ### Timezone handling
@@ -585,7 +550,7 @@ All habit data is stored in a single human-readable JSON file:
 | `data/settings.txt` | User's timezone string | CLI / GUI on first launch |
 | `data/last_reset.txt` | Date of last daily reset | CLI on startup |
 
-> **Backup tip:** To back up your data, simply copy the `data/` folder.
+> Backup tip: To back up your data, simply copy the `data/` folder.
 > To start fresh, delete `data/habits.json`.
 
 ---
@@ -647,22 +612,22 @@ OK
 
 | Principle | How it is applied |
 |---|---|
-| **Encapsulation** | Each class owns its data; external code uses public methods only |
-| **Single Responsibility** | Each module has exactly one job (e.g. `StorageManager` only handles files) |
-| **Separation of Concerns** | Data, logic, storage, and display are fully independent layers |
-| **Composition** | Managers are composed together in `main.py` and `gui_manager.py` |
-| **Dependency Injection** | `HabitManager` receives `StorageManager` as a parameter, making it easy to test with a temporary file |
+| Encapsulation | Each class owns its data; external code uses public methods only |
+| Single Responsibility | Each module has exactly one job (e.g. `StorageManager` only handles files) |
+| Separation of Concerns | Data, logic, storage, and display are fully independent layers |
+| Composition | Managers are composed together in `main.py` and `gui_manager.py` |
+| Dependency Injection | `HabitManager` receives `StorageManager` as a parameter, making it easy to test with a temporary file |
 
 ### Functional Programming (FP) — `analytics/analytics.py`
 
 | Principle | How it is applied |
 |---|---|
-| **Pure functions** | Every analytics function returns the same output for the same input |
-| **No side effects** | Analytics functions never modify Habit objects — they only read them |
-| **`map()`** | `update_streaks()` applies streak recalculation to every habit |
-| **`filter()`** | `filter_by_type()`, `filter_by_window()`, `streak_at_risk()` |
-| **`sorted()` + `lambda`** | `weakest_habits()`, `strongest_habits()` rank by completion rate |
-| **`reduce()`** | `generate_report()` aggregates all stats across every habit into one dict |
+| Pure functions | Every analytics function returns the same output for the same input |
+| No side effects | Analytics functions never modify Habit objects — they only read them |
+| `map()` | `update_streaks()` applies streak recalculation to every habit |
+| `filter()` | `filter_by_type()`, `filter_by_window()`, `streak_at_risk()` |
+| `sorted()` + `lambda` | `weakest_habits()`, `strongest_habits()` rank by completion rate |
+| `reduce()` | `generate_report()` aggregates all stats across every habit into one dict |
 
 ---
 
@@ -670,11 +635,11 @@ OK
 
 ### Current limitations
 
-- **Single user** — the app is designed for one user on one device. There is no
+- Single user — the app is designed for one user on one device. There is no
   login or multi-user support.
-- **No cloud sync** — data is stored locally in `data/habits.json` only.
-- **GUI requires Tkinter** — if Tkinter is not available, use the CLI (`main.py`).
-- **Break habits use tick-off, not timer** — habits of type `"break"` (e.g.
+- No cloud sync — data is stored locally in `data/habits.json` only.
+- GUI requires Tkinter — if Tkinter is not available, use the CLI (`main.py`).
+- Break habits use tick-off, not timer — habits of type `"break"` (e.g.
   "No Junk Food") are marked complete without a Start/Done timer since they
   cover the whole day.
 
