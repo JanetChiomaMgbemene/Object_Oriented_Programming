@@ -14,16 +14,16 @@ class CongratManager:    # Generates motivational messages when habits are compl
     ]
 
     def generate_message(self, habit) -> str:        # Returns a personalised message using the habit name and streak.
-        streak = habit.current_streak
+        streak = getattr(habit, "current_streak", 0)
         streak_note = f" ({streak}-day streak! 🔥)" if streak > 1 else ""
+        habit_name = getattr(habit, "habit_name", "your habit")
         base = random.choice(self.MESSAGES)
-        return f"Great job completing '{habit.habit_name}'!{streak_note}\n{base}"
+        return f"Great job completing '{habit_name}'!{streak_note}\n{base}"
 
     def get_random_message(self) -> str:        # Returns a random message.
         return random.choice(self.MESSAGES)
 
     def get_custom_message(self, habit) -> str:
-        # Returns the habit's custom message if set, else a generated one.
         if habit.custom_message:
             return habit.custom_message
         return self.generate_message(habit)

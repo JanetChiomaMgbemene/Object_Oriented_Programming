@@ -24,6 +24,10 @@ class TimetableManager:
         self.organise_habits()
         return self.timetable_structure
 
+    def get_slot(self, window_label: str) -> list:
+        return [h for h in self._hm.get_habits()
+                if h.preferred_window == window_label]
+
     def display_timetable(self) -> str:
         self.organise_habits()
 
@@ -94,6 +98,3 @@ class TimetableManager:
 
         lines.append(bot_row)
         return "\n".join(lines)
-
-        return [h for h in self._hm.get_habits()
-                if h.preferred_window == window_label]
