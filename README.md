@@ -1,45 +1,84 @@
-# Timetable-Based Habit Tracking Application
-# 1. Project Overview
+# 🗓 Timetable-Based Habit Tracking Application
 
-Habit Tracker is a simple application built using Python and object-oriented programming (OOP) concepts. This is a Python-based habit tracking application that organises habits into a timetable format rather than a plain checklist. Instead of showing habits as a flat list, the app groups them by time window (e.g. Morning, Evening) so users can see their daily schedule at a glance.
+**Course:** DLBDSOOFPP01 – Object Oriented and Functional Programming with Python  
+**Author:** Janet Chioma Mgbemene · Matriculation No. 92130452  
+**Programme:** Cybersecurity  
 
-When a user starts or finishes a habit, the app automatically records the exact local clock time in their timezone (no manual time entry required). This means the timetable shows not just when a habit was planned, but when it actually happened.
+---
+
+## Table of Contents
+
+1. [Project Overview](#1-project-overview)
+2. [Features](#2-features)
+3. [Requirements](#3-requirements)
+4. [Installation](#4-installation)
+5. [How to Run](#5-how-to-run)
+6. [First Launch](#6-first-launch)
+7. [Using the CLI](#7-using-the-cli)
+8. [Using the GUI](#8-using-the-gui)
+9. [Project Structure](#9-project-structure)
+10. [Module Descriptions](#10-module-descriptions)
+11. [How Time Recording Works](#11-how-time-recording-works)
+12. [Data Storage](#12-data-storage)
+13. [Running the Tests](#13-running-the-tests)
+14. [Design Principles](#14-design-principles)
+15. [Known Limitations & Future Work](#15-known-limitations--future-work)
+
+---
+
+## 1. Project Overview
+
+This is a Python-based habit tracking application that organises habits into a
+**timetable** format rather than a plain checklist. Instead of showing habits as
+a flat list, the app groups them by **time window** (e.g. Morning, Evening) so
+users can see their daily schedule at a glance.
+
+When a user starts or finishes a habit, the app **automatically records the
+exact local clock time** in their timezone — no manual time entry required.
+This means the timetable shows not just *when* a habit was planned, but *when
+it actually happened*.
 
 The application is available in two modes:
 
-| Mode                           | File to run | Best for | 
-| CLI (Command-Line Interface)   | `main.py`   | Terminal users |
-| GUI (Graphical User Interface) | `gui/gui_manager.py` | Visual interaction, daily use |
+| Mode | File to run | Best for |
+|---|---|---|
+| **CLI** (Command-Line Interface) | `main.py` | Terminal users, coursework submission |
+| **GUI** (Graphical User Interface) | `gui/gui_manager.py` | Visual interaction, daily use |
 
-# 2. Features
+---
 
--Time window picker — choose Morning, Evening, etc. instead of typing a time
--Auto-recorded times — the app logs the exact clock time you press Start and Done
--Duration tracking — automatically calculates how long each habit took
--Timezone support — works correctly for users in any timezone worldwide
--Streak tracking — counts consecutive completions and alerts you when a streak is at risk
--Proof upload — attach a photo as evidence of completing a habit
--Motivational messages — personalised congratulatory messages on completion
--Rewards system — assign a reward to each habit
--Analytics — completion rates, streaks, weakest habits, average duration
--Predefined habits — browse built-in suggestions to get started quickly
--4-week sample data — load realistic dummy data for testing and demonstration
--JSON persistence — all data is saved to disk and reloaded between sessions
--No internet required — fully offline, no third-party packages needed
+## 2. Features
 
-# 3. Requirements
+- **Time window picker** — choose Morning, Evening, etc. instead of typing a time
+- **Auto-recorded times** — the app logs the exact clock time you press Start and Done
+- **Duration tracking** — automatically calculates how long each habit took
+- **Timezone support** — works correctly for users in any timezone worldwide
+- **Streak tracking** — counts consecutive completions and alerts you when a streak is at risk
+- **Proof upload** — attach a photo as evidence of completing a habit
+- **Motivational messages** — personalised congratulatory messages on completion
+- **Rewards system** — assign a reward to each habit
+- **Analytics** — completion rates, streaks, weakest habits, average duration
+- **Predefined habits** — browse built-in suggestions to get started quickly
+- **4-week sample data** — load realistic dummy data for testing and demonstration
+- **JSON persistence** — all data is saved to disk and reloaded between sessions
+- **No internet required** — fully offline, no third-party packages needed
 
-| Requirement       | Details |
-| Python version    | 3.9 or higher (3.12 recommended) |
-| External packages | None — uses only the Python standard library |
-| Operating system  | Windows, macOS, or Linux |
-| GUI dependency    | Tkinter (included with most Python installations) |
+---
 
-> Why Python 3.9+? 
+## 3. Requirements
+
+| Requirement | Details |
+|---|---|
+| Python version | **3.9 or higher** (3.12 recommended) |
+| External packages | **None** — uses only the Python standard library |
+| Operating system | Windows, macOS, or Linux |
+| GUI dependency | Tkinter (included with most Python installations) |
+
+> **Why Python 3.9+?**  
 > This project uses `zoneinfo`, a timezone library that was added to the Python
 > standard library in version 3.9. No `pip install` is needed.
 
-# Checking your Python version
+### Checking your Python version
 
 ```bash
 python3 --version
@@ -47,21 +86,24 @@ python3 --version
 
 If you see `Python 3.9.x` or higher, you are ready to go.
 
-# Checking Tkinter (for the GUI only)
+### Checking Tkinter (for the GUI only)
 
 ```bash
 python3 -m tkinter
 ```
 
-A small test window should appear. If it does, Tkinter is installed. If not, see the note below.
+A small test window should appear. If it does, Tkinter is installed. If not,
+see the note below.
 
-> Tkinter not found?  
+> **Tkinter not found?**  
 > On Ubuntu/Debian: `sudo apt install python3-tk`  
 > On Fedora: `sudo dnf install python3-tkinter`  
 > On macOS with Homebrew: `brew install python-tk`  
 > On Windows: reinstall Python from python.org and tick the "tcl/tk" option.
 
-# 4. Installation
+---
+
+## 4. Installation
 
 No installation is required. Simply download or unzip the project folder.
 
@@ -75,28 +117,33 @@ cd habit_tracker
 
 That is all. There is nothing to install with `pip`.
 
+---
 
-# 5. How to Run
+## 5. How to Run
 
-# Run the CLI (recommended for coursework)
+### Run the CLI (recommended for coursework)
 
 ```bash
 python3 main.py
 ```
 
-# Run the GUI
+### Run the GUI
 
 ```bash
 python3 gui/gui_manager.py
 ```
 
-Both modes share the same data files (`data/habits.json`), so anything you do in the CLI is immediately visible in the GUI and vice versa.
+Both modes share the same data files (`data/habits.json`), so anything you do
+in the CLI is immediately visible in the GUI and vice versa.
 
-# 6. First Launch
+---
 
-The very first time you run the app, it will ask you to choose your timezone. This is a one-time setup step.
+## 6. First Launch
 
-CLI — timezone picker:
+The very first time you run the app, it will ask you to **choose your timezone**.
+This is a one-time setup step.
+
+**CLI — timezone picker:**
 
 ```
 ══════════════════════════════════════════════════
@@ -659,3 +706,4 @@ cp -r data/ data_backup/
 
 # Start fresh (delete all habits)
 rm data/habits.json
+```
