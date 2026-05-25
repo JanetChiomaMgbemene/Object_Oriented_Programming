@@ -300,7 +300,7 @@ habit_tracker/
 │   ├── default_habits.py         # Predefined habits + 4-week seed data
 │   ├── timetable_manager.py      # Sorts and displays habits by time window
 │   ├── reward_manager.py         # Reward assignment + proof verification
-│   └── congrat_manager.py        # Motivational message generation
+│   └── congrats_manager.py        # Motivational message generation
 │
 ├── analytics/
 │   ├── __init__.py
@@ -318,7 +318,7 @@ habit_tracker/
 │   ├── test_timetable_manager.py # Unit tests for TimetableManager
 │   ├── test_default_habits.py    # Unit tests for DefaultHabitManager
 │   ├── test_reward_manager.py    # Unit tests for RewardManager
-│   ├── test_congrat_manager.py   # Unit tests for CongratManager
+│   ├── test_congrats_manager.py   # Unit tests for CongratManager
 │   └── test_analytics.py        # Unit tests for all analytics functions
 │
 ├── data/
@@ -404,7 +404,7 @@ Key methods:
 
 ---
 
-### `managers/congrat_manager.py`
+### `managers/congrats_manager.py`
 Generates motivational messages on habit completion.
 
 Key methods:
