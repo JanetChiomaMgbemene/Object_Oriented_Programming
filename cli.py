@@ -28,13 +28,12 @@ TIMEZONE_OPTIONS = [
 ]
 
 
+
 def clear():
-    """Clears the terminal screen (works on Windows and Unix)."""
     os.system("cls" if os.name == "nt" else "clear")
 
 
 def print_header(title: str):
-    """Prints a formatted section header."""
     width = 60
     print("\n" + "═" * width)
     print(f"  {title}")
@@ -69,8 +68,6 @@ def ask_yes_no(prompt: str) -> bool:
             return False
         print("  ⚠  Please type y or n.")
 
-
-
 def choose_timezone() -> str:
     print_header("Welcome! Let's set your timezone.")
     print("  Your timezone is used to record the exact time you")
@@ -88,9 +85,7 @@ def choose_timezone() -> str:
     return TIMEZONE_OPTIONS[choice - 1][0]
 
 
-
 def menu_add_habit(hm: HabitManager, user_tz: str, defaults: DefaultHabitManager):
-    """Guides the user through creating a new habit."""
     print_header("Add a New Habit")
 
     if ask_yes_no("Would you like to browse suggested habits?"):
@@ -151,7 +146,6 @@ def menu_add_habit(hm: HabitManager, user_tz: str, defaults: DefaultHabitManager
     print(f"    Reward : {reward}")
     press_enter()
 
-
 def menu_start_habit(hm: HabitManager):
     print_header("Start a Habit")
     habits = hm.get_habits()
@@ -179,6 +173,7 @@ def menu_start_habit(hm: HabitManager):
     press_enter()
 
 
+
 def menu_mark_done(hm: HabitManager, cm: CongratManager, rm: RewardManager):
     print_header("Mark Habit as Done ✓")
     habits = hm.get_habits()
@@ -204,11 +199,9 @@ def menu_mark_done(hm: HabitManager, cm: CongratManager, rm: RewardManager):
     habit = markable[choice - 1]
     notes = ask("Add a note (optional, Enter to skip): ")
 
-    # Break habits don't use Start/Done timer
     use_timer = habit.habit_type == "build" and bool(habit.actual_start_time)
     hm.mark_complete(habit.habit_id, notes, use_timer)
 
-    # Refresh to get updated streak
     habit = hm.get_habit_by_id(habit.habit_id)
 
     print(f"\n  ✓ '{habit.habit_name}' marked complete!")
@@ -223,7 +216,6 @@ def menu_mark_done(hm: HabitManager, cm: CongratManager, rm: RewardManager):
     print(f"    Streak  : {habit.current_streak} 🔥")
     print(f"\n  {cm.get_custom_message(habit)}")
 
-    # Ask about proof upload
     if ask_yes_no("\n  Upload a proof photo?"):
         path = ask("Image file path: ")
         if rm.verify_proof(path):
@@ -235,7 +227,6 @@ def menu_mark_done(hm: HabitManager, cm: CongratManager, rm: RewardManager):
     press_enter()
 
 
-
 def menu_view_timetable(tm: TimetableManager, user_tz: str):
     print_header("Today's Timetable")
     now = get_local_time(user_tz)
@@ -245,46 +236,159 @@ def menu_view_timetable(tm: TimetableManager, user_tz: str):
 
 
 def menu_analytics(hm: HabitManager):
-    print_header("Analytics & Progress")
+    from analytics.analytics import (
+        get_all_habits, get_habits_by_periodicity,
+        longest_streak_all, longest_streak_for_habit,
+    )
+
+    while True:
+        print_header("Analytics & Progress")
+        habits = hm.get_habits()
+
+        if not habits:
+            print("  No habits to analyse yet.")
+            press_enter()
+            return
+
+        print("  [1]  List all tracked habits")
+        print("  [2]  List habits by periodicity  (daily / weekly / monthly)")
+        print("  [3]  Longest streak — across all habits")
+        print("  [4]  Longest streak — for a specific habit")
+        print("  [5]  Full progress report")
+        print("  [6]  Back to main menu")
+        print()
+
+        choice = ask_int("Choose: ", 1, 6)
+
+        if choice == 1:
+            print_header("All Currently Tracked Habits")
+            all_habits = get_all_habits(habits)
+            print(f"  {'ID':<5} {'Name':<25} {'Type':<8} {'Frequency':<10} {'Streak'}")
+            print("  " + "─" * 58)
+            for h in all_habits:
+                print(f"  {h.habit_id:<5} {h.habit_name:<25} {h.habit_type:<8}"
+                      f" {h.frequency:<10} {h.current_streak} days")
+            print(f"\n  Total: {len(all_habits)} habit(s)")
+            press_enter()
+
+        elif choice == 2:
+            print("\n  Periodicity:  [1] daily   [2] weekly   [3] monthly")
+            freq_map = {1: "daily", 2: "weekly", 3: "monthly"}
+            freq = freq_map[ask_int("Choose: ", 1, 3)]
+            filtered = get_habits_by_periodicity(habits, freq)
+            print_header(f"{freq.capitalize()} Habits")
+            if not filtered:
+                print(f"  No {freq} habits found.")
+            else:
+                print(f"  {'ID':<5} {'Name':<25} {'Type':<8} {'Streak'}")
+                print("  " + "─" * 45)
+                for h in filtered:
+                    print(f"  {h.habit_id:<5} {h.habit_name:<25}"
+                          f" {h.habit_type:<8} {h.current_streak} days")
+                print(f"\n  Total: {len(filtered)} {freq} habit(s)")
+            press_enter()
+
+        elif choice == 3:
+            name, streak = longest_streak_all(habits)
+            print_header("Longest Streak — All Habits")
+            print(f"  🏆  {name}")
+            print(f"      Longest streak: {streak} consecutive period(s)")
+            print("\n  Full ranking:")
+            ranked = sorted(habits, key=lambda h: h.longest_streak, reverse=True)
+            for i, h in enumerate(ranked, 1):
+                bar = "█" * min(h.longest_streak, 30)
+                print(f"  {i}. {h.habit_name:<25} {h.longest_streak:>3} days  {bar}")
+            press_enter()
+
+        elif choice == 4:
+            print_header("Longest Streak — Specific Habit")
+            print("  Select a habit:\n")
+            for h in habits:
+                print(f"  [ID {h.habit_id}]  {h.habit_name}")
+            habit_id = ask_int("\n  Enter habit ID: ", 1, 9999)
+            habit = hm.get_habit_by_id(habit_id)
+            if habit is None:
+                print("  ⚠  Habit not found.")
+            else:
+                streak = longest_streak_for_habit(habit)
+                print(f"\n  Habit  : {habit.habit_name}")
+                print(f"  Created: {habit.created_at[:10]}")
+                print(f"  🏆 Longest streak: {streak} consecutive period(s)")
+                print(f"  🔥 Current streak: {habit.current_streak}")
+            press_enter()
+
+        elif choice == 5:
+            print_header("Full Progress Report")
+            report = generate_report(habits)
+            print(f"  Total habits       : {report['total_habits']}")
+            print(f"  Build habits       : {report['build_habits']}")
+            print(f"  Break habits       : {report['break_habits']}")
+            print(f"  Avg completion rate: {report['avg_completion_rate']*100:.1f}%")
+            print(f"  Longest streak ever: {report['longest_overall_streak']} days")
+            print(f"  Most consistent    : {report['most_consistent']}")
+            print(f"  Needs improvement  : {report['needs_improvement']}")
+            if report["avg_duration_mins"] is not None:
+                print(f"  Avg actual duration: {report['avg_duration_mins']} min")
+
+            print("\n  ── Per-habit breakdown ──────────────────────────────")
+            for h in habits:
+                rate  = completion_rate(h)
+                dur   = avg_duration(h)
+                dur_s = f"  avg {dur} min" if dur else ""
+                created = h.created_at[:10]
+                print(f"  {h.habit_name:<25} {rate*100:5.1f}%  "
+                      f"streak {h.current_streak}  created {created}{dur_s}")
+
+            at_risk = streak_at_risk(habits)
+            if at_risk:
+                print("\n  ⚠  STREAK ALERT — do these today or lose your streak:")
+                for h in at_risk:
+                    print(f"     • {h.habit_name} ({h.current_streak}-day streak!)")
+            press_enter()
+
+        elif choice == 6:
+            return
+
+
+def menu_delete_habit(hm: HabitManager):
+    print_header("Delete a Habit")
     habits = hm.get_habits()
 
     if not habits:
-        print("  No habits to analyse yet.")
+        print("  No habits to delete yet.")
         press_enter()
         return
 
-    report = generate_report(habits)
-
-    print(f"  Total habits       : {report['total_habits']}")
-    print(f"  Build habits       : {report['build_habits']}")
-    print(f"  Break habits       : {report['break_habits']}")
-    print(f"  Avg completion rate: {report['avg_completion_rate']*100:.1f}%")
-    print(f"  Longest streak ever: {report['longest_overall_streak']} days")
-    print(f"  Most consistent    : {report['most_consistent']}")
-    print(f"  Needs improvement  : {report['needs_improvement']}")
-    if report["avg_duration_mins"] is not None:
-        print(f"  Avg actual duration: {report['avg_duration_mins']} min")
-
-    # Per-habit breakdown
-    print("\n  ── Per-habit breakdown ──────────────────────────────────────")
+    print("  Current habits:\n")
     for h in habits:
-        rate  = completion_rate(h)
-        dur   = avg_duration(h)
-        dur_s = f"  avg {dur} min" if dur else ""
-        print(f"  {h.habit_name:25}  {rate*100:5.1f}%  streak {h.current_streak}{dur_s}")
+        print(f"  [ID {h.habit_id}]  {h.habit_name:<25}  {h.frequency}"
+              f"  ·  created {h.created_at[:10]}")
 
-    # Streak at risk
-    at_risk = streak_at_risk(habits)
-    if at_risk:
-        print("\n  ⚠  STREAK ALERT — do these today or lose your streak:")
-        for h in at_risk:
-            print(f"     • {h.habit_name} ({h.current_streak}-day streak at risk!)")
+    habit_id = ask_int("\n  Enter habit ID to delete (0 to cancel): ", 0, 9999)
+    if habit_id == 0:
+        return
+
+    habit = hm.get_habit_by_id(habit_id)
+    if not habit:
+        print("  ⚠  Habit not found.")
+        press_enter()
+        return
+
+    print(f"\n  You are about to delete: '{habit.habit_name}'")
+    print(f"  This will permanently remove all {len(habit.completion_history)}"
+          f" history entries.")
+
+    if ask_yes_no("  Are you sure?"):
+        hm.delete_habit(habit_id)
+        print(f"  ✓ '{habit.habit_name}' deleted.")
+    else:
+        print("  Cancelled — habit was not deleted.")
 
     press_enter()
 
 
+
 def menu_manage(hm: HabitManager):
-    """Edit or delete existing habits."""
     print_header("Manage Habits")
     habits = hm.get_habits()
 
@@ -349,8 +453,7 @@ def menu_manage(hm: HabitManager):
 
 
 def main():
-
-    storage  = StorageManager()
+    storage  = StorageManager(file_path="data/habits.json")
     hm       = HabitManager(storage)
     hm.load()
 
@@ -418,20 +521,22 @@ def main():
         print("  [2]  Start a habit  (records start time ▶)")
         print("  [3]  Mark habit done  (records end time ✓)")
         print("  [4]  Add a new habit")
-        print("  [5]  Analytics & progress")
-        print("  [6]  Manage habits (edit / delete)")
-        print("  [7]  Exit")
+        print("  [5]  Delete a habit")
+        print("  [6]  Analytics & progress")
+        print("  [7]  Edit habits")
+        print("  [8]  Exit")
         print()
 
-        choice = ask_int("Choose an option: ", 1, 7)
+        choice = ask_int("Choose an option: ", 1, 8)
 
         if   choice == 1: menu_view_timetable(tm, user_tz)
         elif choice == 2: menu_start_habit(hm)
         elif choice == 3: menu_mark_done(hm, cm, rm)
         elif choice == 4: menu_add_habit(hm, user_tz, defaults)
-        elif choice == 5: menu_analytics(hm)
-        elif choice == 6: menu_manage(hm)
-        elif choice == 7:
+        elif choice == 5: menu_delete_habit(hm)
+        elif choice == 6: menu_analytics(hm)
+        elif choice == 7: menu_manage(hm)
+        elif choice == 8:
             print("\n  👋 Goodbye! Keep up those habits!\n")
             sys.exit(0)
 

@@ -51,6 +51,23 @@ class TestHabit(unittest.TestCase):
         for key in ("preferred_window","scheduled_start","actual_start_time"):
             self.assertIn(key, d)
 
+    def test_to_dict_has_created_at(self):
+        d = make_habit().to_dict()
+        self.assertIn("created_at", d)
+        self.assertIsInstance(d["created_at"], str)
+        self.assertGreater(len(d["created_at"]), 0)
+
+    def test_created_at_is_set_on_init(self):
+        h = make_habit()
+        self.assertIsNotNone(h.created_at)
+        self.assertIsInstance(h.created_at, str)
+        self.assertIn("-", h.created_at)
+
+    def test_created_at_preserved_in_roundtrip(self):
+        h = make_habit()
+        loaded = Habit.from_dict(h.to_dict())
+        self.assertEqual(loaded.created_at, h.created_at)
+
     def test_roundtrip(self):
         h = make_habit()
         loaded = Habit.from_dict(h.to_dict())

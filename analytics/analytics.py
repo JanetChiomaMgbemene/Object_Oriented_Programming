@@ -83,6 +83,26 @@ def avg_duration(habit):
                  if e.get("duration_mins") is not None]
     return round(sum(durations) / len(durations), 1) if durations else None
 
+def get_all_habits(habit_list: list) -> list:
+    return list(habit_list)
+
+
+def get_habits_by_periodicity(habit_list: list, periodicity: str) -> list:
+    return list(filter(lambda h: h.frequency == periodicity, habit_list))
+
+
+def longest_streak_all(habit_list: list) -> tuple:
+    if not habit_list:
+        return ("None", 0)
+    best = max(habit_list, key=lambda h: h.longest_streak)
+    return (best.habit_name, best.longest_streak)
+
+
+def longest_streak_for_habit(habit) -> int:
+    _, longest = calc_streak(habit)
+    return longest
+
+
 def generate_report(habit_list: list) -> dict:
     if not habit_list:
         return {"total_habits": 0, "build_habits": 0, "break_habits": 0,
