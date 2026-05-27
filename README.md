@@ -151,7 +151,7 @@ After the first-launch setup, the main menu is displayed on every run:
 ```
 ════════════════════════════════════════════════════════════
               🗓  HABIT TRACKER
-         2025-11-04 07:15 AM WAT
+         2026-11-04 07:15 AM WAT
 ════════════════════════════════════════════════════════════
 
    Progress today: 1/5 habits complete
@@ -475,7 +475,7 @@ Both times are stored in the `completion_history` log entry:
 
 ```json
 {
-  "date":          "2025-11-04",
+  "date":          "2026-11-04",
   "actual_start":  "06:32 AM",
   "actual_end":    "07:01 AM",
   "duration_mins": 29,
@@ -642,17 +642,6 @@ OK
 - Break habits use tick-off, not timer — habits of type `"break"` (e.g.
   "No Junk Food") are marked complete without a Start/Done timer since they
   cover the whole day.
-
-### Planned for Phase 3
-
-- [ ] SQLite database backend (swappable with JSON via `AbstractStorage` interface)
-- [ ] Weekly and monthly view in the timetable
-- [ ] Export progress report to PDF
-- [ ] Notification/reminder system
-- [ ] GUI proof image preview in Habit Detail screen
-- [ ] Achieve ≥ 85% unit test coverage
-
----
 
 ## Quick Reference
 
