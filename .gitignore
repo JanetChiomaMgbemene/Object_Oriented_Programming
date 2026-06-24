@@ -1,0 +1,16 @@
+# Python cache files — auto-generated, never needed in the repo
+__pycache__/
+*.pyc
+
+# Data files generated when the app runs — not source code
+data/habits.json
+data/settings.txt
+data/last_reset.txt
+
+# Uploaded proof images — user-generated content, not source code
+uploads/*
+!uploads/.gitkeep
+
+# OS-specific junk files
+.DS_Store
+Thumbs.db
