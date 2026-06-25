@@ -1,23 +1,49 @@
 from functools import reduce
 from datetime import date, timedelta
 
+PERIOD_DAYS = {
+    "daily":   1,
+    "weekly":  7,
+    "monthly": 31,
+}
+
 
 def calc_streak(habit) -> tuple:
-    if not habit.completion_history:
+    completed_entries = [e for e in habit.completion_history if e.get("completed")]
+
+    if not completed_entries:
         return (0, 0)
-    current = 0
-    for entry in reversed(habit.completion_history):
-        if entry.get("completed"):
-            current += 1
-        else:
-            break
-    longest, run = 0, 0
-    for entry in habit.completion_history:
-        if entry.get("completed"):
+
+    sorted_entries = sorted(completed_entries, key=lambda e: e["date"])
+    max_gap = PERIOD_DAYS.get(habit.frequency, 1)
+
+    longest = 1
+    run = 1
+    for i in range(1, len(sorted_entries)):
+        prev_date = date.fromisoformat(sorted_entries[i - 1]["date"])
+        curr_date = date.fromisoformat(sorted_entries[i]["date"])
+        gap = (curr_date - prev_date).days
+        if gap <= max_gap:
             run += 1
             longest = max(longest, run)
         else:
-            run = 0
+            run = 1
+
+    current = 1
+    for i in range(len(sorted_entries) - 1, 0, -1):
+        prev_date = date.fromisoformat(sorted_entries[i - 1]["date"])
+        curr_date = date.fromisoformat(sorted_entries[i]["date"])
+        gap = (curr_date - prev_date).days
+        if gap <= max_gap:
+            current += 1
+        else:
+            break
+
+    most_recent = date.fromisoformat(sorted_entries[-1]["date"])
+    days_since_last = (date.today() - most_recent).days
+    if days_since_last > max_gap:
+        current = 0
+
     return (current, longest)
 
 

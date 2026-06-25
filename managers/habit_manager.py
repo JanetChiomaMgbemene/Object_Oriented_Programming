@@ -1,5 +1,6 @@
 from models.habit import Habit, TIME_WINDOWS
 from managers.storage_manager import StorageManager
+from analytics.analytics import calc_streak
 
 
 class HabitManager:
@@ -79,7 +80,7 @@ class HabitManager:
         self._persist()
         return True
 
-    def update_habit(self, habit_id: int, **kwargs) -> bool:        # Updates any habit attribute.
+    def update_habit(self, habit_id: int, **kwargs) -> bool:   
         habit = self.get_habit_by_id(habit_id)
         if habit is None:
             return False
@@ -95,10 +96,10 @@ class HabitManager:
         self._persist()
         return True
 
-    def get_habits(self) -> list: # Returns the full list of habits.
+    def get_habits(self) -> list:
         return self.habit_list
 
-    def get_habit_by_id(self, habit_id: int):        # Returns the Habit with the given ID, or None if not found.
+    def get_habit_by_id(self, habit_id: int):
         for habit in self.habit_list:
             if habit.habit_id == habit_id:
                 return habit
@@ -113,15 +114,9 @@ class HabitManager:
         self._persist()
 
     def _update_streak(self, habit: Habit) -> None:
-        streak = 0
-        for entry in reversed(habit.completion_history):
-            if entry.get("completed"):
-                streak += 1
-            else:
-                break
-        habit.current_streak = streak
-        if streak > habit.longest_streak:
-            habit.longest_streak = streak
+        current, longest = calc_streak(habit)
+        habit.current_streak = current
+        habit.longest_streak = max(habit.longest_streak, longest)
 
-    def _persist(self) -> None:        # Saves the current habit_list to disk immediately.
+    def _persist(self) -> None:  
         self._storage.save_habits(self.habit_list)
