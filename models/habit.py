@@ -15,6 +15,16 @@ TIME_WINDOWS = [
 
 
 def get_local_time(timezone_str: str) -> datetime:
+  """
+    Return the current date and time in the given timezone.
+ 
+    Args:
+        timezone_str: An IANA timezone name, e.g. "Africa/Lagos" or "UTC".
+            If the string is invalid or unrecognised, UTC is used instead.
+ 
+    Returns:
+        A timezone-aware datetime object representing "now" in that zone.
+    """
     try:
         tz = ZoneInfo(timezone_str)
     except (ZoneInfoNotFoundError, Exception):
@@ -47,6 +57,9 @@ class Habit:
         custom_message: str = "",
         proof_image_path: str = None,
     ):
+           """
+        Initialise a new Habit.
+        """   
         self.habit_id         = habit_id
         self.habit_name       = habit_name
         self.habit_type       = habit_type        # "build" | "break"
@@ -117,16 +130,35 @@ class Habit:
         return entry
 
     def upload_proof(self, image_path: str) -> None:
+        """
+        Attach a proof image to this habit and to its most recent
+        completion log entry.
+        """
         self.proof_image_path = image_path
         if self.completion_history:
             self.completion_history[-1]["proof"] = image_path
 
     def update_habit(self, **kwargs) -> None:
+         """
+        Update one or more attributes of this habit.
+ 
+        Only existing attributes are updated; unknown keyword arguments
+        are silently ignored.
+            **kwargs: Attribute names and their new values, e.g.
+                update_habit(reward="Movie night", frequency="weekly").
+        """
         for key, value in kwargs.items():
             if hasattr(self, key):
                 setattr(self, key, value)
 
     def to_dict(self) -> dict:
+         """
+        Convert this Habit into a plain dictionary for JSON storage.
+ 
+        Returns:
+            A dict containing every attribute needed to fully reconstruct
+            this Habit later via from_dict().
+        """
         return {
             "habit_id":          self.habit_id,
             "habit_name":        self.habit_name,
@@ -174,6 +206,7 @@ class Habit:
         return habit
 
     def __repr__(self) -> str:
+            """Return a concise debug-friendly representation of this habit."""
         return (f"Habit(id={self.habit_id}, name='{self.habit_name}', "
                 f"window='{self.preferred_window}', status={self.status}, "
                 f"streak={self.current_streak})")
